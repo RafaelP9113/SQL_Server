@@ -1,0 +1,3 @@
+exec comparar_venda '20210401', '20210408'
+
+exec LOCALIZAR_TICKET_DIFERENCA '20210408', '000039'

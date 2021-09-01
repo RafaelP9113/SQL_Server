@@ -1,0 +1,39 @@
+
+Criar bat para parar o servico
+	* net stop "etl" 
+	
+	criar bat para executar procedure zn_corrige_movimento
+	
+	sqlcmd -Sserver1\instance1 -E -iE:\Data\SomeScriptFile.sql -oE:\Data\Output.txt
+		
+create procedure zn_corrige_movimento 
+
+as
+
+set dateformat dmy
+	
+declare @data smalldatetime
+set @data = dateadd(dd,-1,getdate())
+set @data = convert (varchar(8),@data)
+
+select @data
+
+UPDATE	CLIENTES_VAREJO SET DATA_PARA_TRANSFERENCIA = GETDATE()
+FROM	CLIENTES_VAREJO
+WHERE	CODIGO_CLIENTE IN (SELECT CODIGO_CLIENTE FROM LOJA_VENDA WHERE DATA_VENDA >= @data and data_venda < dateadd (dd, 1, @data))
+
+UPDATE	LOJA_NOTA_FISCAL SET DATA_PARA_TRANSFERENCIA = GETDATE()
+FROM	LOJA_NOTA_FISCAL
+WHERE	EMISSAO >= @data and EMISSAO < dateadd (dd, 1, @data)
+
+UPDATE	LOJA_VENDA SET DATA_PARA_TRANSFERENCIA = GETDATE()
+FROM	LOJA_VENDA
+WHERE	DATA_VENDA >= @data  and data_venda < dateadd (dd, 1, @data)
+
+UPDATE	LOJA_CAIXA_LANCAMENTOS SET DATA_PARA_TRANSFERENCIA = GETDATE()
+FROM	LOJA_CAIXA_LANCAMENTOS
+WHERE	DATA >= @data  and DATA < dateadd (dd, 1, @data)
+
+
+Criar bat para icicia o servico
+	* net start "etl" 

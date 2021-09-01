@@ -1,0 +1,36 @@
+select * from loja_venda
+where TICKET in ('00062479','00063767','00064210')
+--and DATA_VENDA = '20210514'
+and CODIGO_FILIAL = '000064'
+
+select *
+update loja_venda_parcelas set CODIGO_ADMINISTRADORA = '03', COD_CREDENCIADORA = '12'
+from LOJA_VENDA_PARCELAS
+where LANCAMENTO_CAIXA in ('045L025')
+--and DATA_VENDA = '20210514'
+and CODIGO_FILIAL = '000064'
+and TERMINAL = '001'
+
+select * 
+update loja_venda_parcelas set CODIGO_ADMINISTRADORA = '04', COD_CREDENCIADORA = '12'
+from LOJA_VENDA_PARCELAS
+where LANCAMENTO_CAIXA in ('145L00C')
+--and DATA_VENDA = '20210514'
+and CODIGO_FILIAL = '000064'
+and TERMINAL = '001'
+
+select *
+update loja_venda_parcelas set CODIGO_ADMINISTRADORA = '06', COD_CREDENCIADORA = '12'
+from LOJA_VENDA_PARCELAS
+where LANCAMENTO_CAIXA in ('195L017')
+--and DATA_VENDA = '20210514'
+and CODIGO_FILIAL = '000064'
+and TERMINAL = '002'
+
+
+select * from TIPOS_PGTO
+select * from ADMINISTRADORAS_CARTAO
+
+-- CIELO - MAESTRO        04   12
+-- CIELO - MASTERCARD     03   12
+--CIELO - ELO DEBITO      06   12

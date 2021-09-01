@@ -1,0 +1,49 @@
+create table #series (id int identity, CODIGO_FILIAL CHAR (6), SERIE_NF CHAR(6))
+
+
+INSERT #SERIES
+SELECT DISTINCT CODIGO_FILIAL, SERIE_NF
+FROM LOJA_NOTA_FISCAL
+where CODIGO_FILIAL >= 0
+ORDER BY 1, 2
+
+
+DECLARE @CODIGO_FILIAL CHAR (6)
+DECLARE @SERIE_NF CHAR(6)
+declare @id int
+
+set @id = (select MIN(ID) from #series)
+SET @CODIGO_FILIAL = (SELECT codigo_filial FROM #series WHERE ID = @ID)
+SET @SERIE_NF = (SELECT SERIE_NF FROM #series WHERE ID = @ID)
+
+while @id is not null
+
+begin 
+
+DELETE #series WHERE ID = @ID 
+
+SET @ID = (SELECT MIN(ID) FROM #series)
+SET @CODIGO_FILIAL = (SELECT codigo_filial FROM #series WHERE ID = @ID)
+set @SERIE_NF = (SELECT SERIE_NF FROM #series WHERE ID = @ID)
+
+DECLARE @START INT
+DECLARE @END INT
+
+SELECT @START =1 -- ESTOU CONSIDERANDO QUE COMECOU NO NUMERO 1 .. 
+SELECT @END = MAX(NF_NUMERO) FROM LOJA_NOTA_FISCAL (NOLOCK) AS a
+inner join #series b on a.CODIGO_FILIAL = b.CODIGO_FILIAL collate Latin1_General_CI_AS
+and a.SERIE_NF = b.SERIE_NF  collate Latin1_General_CI_AS
+and @id = id
+
+WHILE @START <= @END
+BEGIN
+ IF NOT EXISTS (SELECT NF_NUMERO  FROM LOJA_NOTA_FISCAL (NOLOCK)  AS a 
+inner join #series b on a.CODIGO_FILIAL = b.CODIGO_FILIAL collate Latin1_General_CI_AS
+and a.SERIE_NF = b.SERIE_NF  collate Latin1_General_CI_AS
+and @id = id
+WHERE NF_NUMERO = @START)
+SELECT @CODIGO_FILIAL AS CODIGO_FILIAL, @SERIE_NF AS SERIE_NF, @START AS PULO_SEQ 
+SET @START = @START + 1
+END  
+
+END

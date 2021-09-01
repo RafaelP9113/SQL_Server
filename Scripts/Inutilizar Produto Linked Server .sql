@@ -1,0 +1,28 @@
+
+Update [172.20.49.2\interfacenet].linxpos.dbo.PRODUTOS 
+	set INATIVO = '1'
+	WHERE PRODUTO IN('020634',
+'021173',
+'021461',
+'021472',
+'021474',
+'021482',
+'021486',
+'021494',
+'021503',
+'022872',
+'023159')
+		
+Update [172.20.49.2\interfacenet].linxpos.dbo.PRODUTOS_BARRA 
+	set INATIVO = '1'
+	WHERE PRODUTO IN('020634',
+'021173',
+'021461',
+'021472',
+'021474',
+'021482',
+'021486',
+'021494',
+'021503',
+'022872',
+'023159')
